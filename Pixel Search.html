@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pixel Studio Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #141922;
+      color: #fafafa;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 36px 16px 16px 16px;
+      text-align: center;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 12px auto;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      box-shadow: 0 2px 20px #14f1ff55;
+      background: transparent;
+    }
+    h1 {
+      color: #14f1ff;
+      font-size: 2.4rem;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      margin-top: 0;
+    }
+    .intro {
+      color: #c0c6d9;
+      font-size: 1.1rem;
+      margin-bottom: 22px;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .card {
+      background: #232e3d;
+      margin: 0 auto;
+      padding: 32px 28px 28px 28px;
+      border-radius: 2rem;
+      box-shadow: 0 6px 24px rgba(20, 241, 255, 0.09);
+      max-width: 420px;
+      width: 100%;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out forwards;
+      animation-delay: 0.3s;
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    label {
+      font-size: 1.09rem;
+      color: #14f1ff;
+      margin-bottom: 8px;
+      font-weight: 500;
+      display: block;
+      width: 95%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    input[type="text"] {
+      display: block;
+      margin: 0 auto 18px auto;
+      width: 95%;
+      padding: 15px 12px;
+      font-size: 1.13rem;
+      border: none;
+      border-radius: 1.2rem;
+      background: #181e28;
+      color: #fafafa;
+      outline: none;
+      box-shadow: 0 1px 6px rgba(20,241,255,0.09);
+      transition: box-shadow 0.2s, font-size 0.15s, padding 0.15s;
+    }
+    input[type="text"]:focus {
+      box-shadow: 0 0 10px #14f1ff88;
+    }
+    button {
+      background: linear-gradient(90deg, #14f1ff, #ff70a6);
+      color: #141922;
+      font-weight: bold;
+      border: none;
+      border-radius: 1.2rem;
+      padding: 15px 0;
+      font-size: 1.11rem;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(20,241,255,0.15);
+      transition: background 0.18s, box-shadow 0.2s;
+      margin-bottom: 8px;
+      width: 95%;
+      letter-spacing: 0.03em;
+      outline: none;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    button:hover, button:focus {
+      box-shadow: 0 0 18px 4px #ff70a6cc;
+    }
+    .error {
+      color: #ff7070;
+      font-size: 0.99rem;
+      margin-bottom: 15px;
+      text-align: center;
+      min-height: 22px;
+    }
+    .tips {
+      color: #fffde7;
+      background: #16191f;
+      border-radius: 1rem;
+      padding: 15px 14px 15px 14px;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+      margin-top: 18px;
+      line-height: 1.62;
+      border: 1.5px solid #262e3a;
+      max-width: 95%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+    .tips strong {
+      color: #ffe062;
+    }
+    .share-section {
+      text-align: center;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+    .share-btn {
+      display: inline-block;
+      background: #181e28;
+      color: #ffe062;
+      border: 1.4px solid #ffe062;
+      width: 95%;
+      max-width: 95%;
+      padding: 12px 32px;
+      font-size: 1.07rem;
+      border-radius: 1.1rem;
+      transition: box-shadow 0.2s, background 0.18s, color 0.2s;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      font-weight: 600;
+      outline: none;
+      margin-top: 4px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .share-btn:hover, .share-btn:focus {
+      box-shadow: 0 0 12px 2px #ffe062bb;
+      background: #25283c;
+      color: #fffde7;
+    }
+    .adv-link-section {
+      text-align: center;
+      margin-top: 13px;
+      width: 100%;
+    }
+    .adv-link-section a {
+      color: #14f1ff;
+      text-decoration: underline;
+      font-size: 1.04rem;
+      transition: color 0.2s;
+    }
+    .adv-link-section a:hover {
+      color: #ff70a6;
+      text-decoration: underline;
+    }
+    #toast {
+      position: fixed;
+      left: 50%;
+      top: 30px;
+      transform: translateX(-50%);
+      background: #232e3d;
+      color: #ffe062;
+      padding: 13px 24px;
+      border-radius: 18px;
+      box-shadow: 0 0 18px #14f1ff70;
+      z-index: 999;
+      display: none;
+      font-size: 1.07rem;
+      pointer-events: none;
+      letter-spacing: 0.01em;
+    }
+    footer {
+      margin-top: auto;
+      background: #191d29;
+      color: #9eabbe;
+      padding: 22px 0 24px 0;
+      text-align: center;
+      font-size: 1.09rem;
+      border-radius: 1.4rem 1.4rem 0 0;
+      letter-spacing: 0.01em;
+    }
+    a, a:visited {
+      color: #14f1ff;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #ff70a6;
+      text-decoration: underline;
+    }
+    @media (max-width: 600px) {
+      .card { 
+        padding: 18px 7px 20px 7px;
+        margin-top: 18vw;
+        max-width: 98vw;
+      }
+      .logo {
+        width: 62px; height: 62px;
+        margin-bottom: 8px;
+      }
+      h1 { font-size: 1.44rem; }
+      .tips { font-size: 0.97rem; padding: 11px; }
+      label { font-size: 1rem; }
+      .intro { font-size: 1.02rem; }
+      input[type="text"] { font-size: 1.22rem; padding: 19px 14px;}
+      button, .share-btn { font-size: 1.22rem; padding: 19px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="pixelstudio-logo.png" alt="Pixel Studio Logo" class="logo">
+    <h1>Pixel Studio Search</h1>
+    <div class="intro">
+      Instantly search the Portable Antiquities Scheme database.<br>
+      Enter a description below to discover similar reported finds.
+    </div>
+  </header>
+  <main>
+    <div class="card">
+      <form id="estimatorForm" autocomplete="off">
+        <label for="findInput">Search by Description</label>
+        <input type="text" id="findInput" placeholder="e.g. Roman silver coin, Saxon brooch, Victorian ring" maxlength="70">
+        <div class="error" id="errorMsg"></div>
+        <button type="submit">Search PAS for this find</button>
+      </form>
+      <div class="tips">
+        <strong>Tips for best results:</strong><br>
+        • Use clear keywords like <b>“Roman brooch”</b> or <b>“Victorian coin”</b>.<br>
+        • The search will open official PAS results in a new tab.<br>
+        • For rare or tricky finds, try different keywords.
+      </div>
+      <div class="share-section">
+        <button id="shareBtn" type="button" class="share-btn">Share this tool with friends</button>
+      </div>
+      <div class="adv-link-section">
+        <a href="https://finds.org.uk/database/search" target="_blank">
+  Not sure what to search? Try PAS advanced search.
+</a>
+   </div>
+    </div>
+  </main>
+  <footer>
+    Powered by <a href="https://facebook.com/pixelcreativestudio" target="_blank">Pixel Studio</a> | 
+    <a href="https://finds.org.uk/database" target="_blank">Portable Antiquities Scheme</a>
+  </footer>
+  <div id="toast"></div>
+  <script>
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 1700);
+    }
+
+    document.getElementById('estimatorForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const findInput = document.getElementById('findInput');
+      const query = findInput.value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+      if (!query) {
+        errorMsg.textContent = "Please enter a description of your find.";
+        findInput.focus();
+        return;
+      }
+      errorMsg.textContent = "";
+      showToast("You’re being redirected to the PAS database in a new tab.");
+      setTimeout(() => {
+        const searchUrl = 'https://finds.org.uk/database/search/results/q/' + encodeURIComponent(query.replace(/\s+/g, '+'));
+        window.open(searchUrl, '_blank');
+      }, 1300); // Wait for toast to show
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => showToast("Copied! Share this link with friends."));
+    });
+  </script>
+</body>
+</html>
